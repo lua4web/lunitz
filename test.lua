@@ -45,9 +45,9 @@ function test:run(verbose, setup, teardown)
 	
 	if teardown then
 		not_errored, error_message = xpcall(teardown, aux.handler)
-	end
-	if not not_errored then
-		error_message_suffix = " in teardown function"
+		if not not_errored then
+			error_message_suffix = " in teardown function"
+		end
 	end
 		
 	for event_id, event in ipairs(self.events) do
@@ -63,7 +63,7 @@ function test:run(verbose, setup, teardown)
 			status = "skipped"
 		end
 		
-		ok = ok and event.ok
+		ok = ok and (event.ok or event.type == "say")
 		
 		if not event.ok or verbose then
 			report:add(event:report())

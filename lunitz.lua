@@ -6,7 +6,7 @@ local aux = require "lunitz.aux"
 local long_opts = {
 	verbose = "v",
 	stats = "s",
-	quick = "q",
+	quiet = "q",
 	case = "c",
 	test = "t"
 }
@@ -109,6 +109,15 @@ function _M.say(msg)
 	local event = {
 		type = "say",
 		ok = true,
+		msg = msg
+	}
+	testsuit:add_event(event)
+end
+
+function _M.alert(msg)
+	local event = {
+		type = "say",
+		ok = false,
 		msg = msg
 	}
 	testsuit:add_event(event)
