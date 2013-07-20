@@ -1,6 +1,7 @@
 local _M = {}
 
 local alt_getopt = require "alt_getopt"
+local aux = require "lunitz.aux"
 
 local long_opts = {
 	verbose = "v",
@@ -83,6 +84,11 @@ local function filter(t, pat)
 	end
 end
 
+local function exit_with_error(msg, ...)
+	io.stderr:write(msg:format(...))
+	os.exit(1)
+end
+
 function _M.import(lib)
 	for name, f in pairs(require(lib)) do
 		import_assertion(f, name)
@@ -110,6 +116,14 @@ end
 
 function _M.run()
 	local opts = alt_getopt.get_opts(arg, "vsqc:t:", long_opts)
+	
+	if opts.c and not aux.valid_pattern(opts.c) then
+		exit_with_error("Incorrect pattern %q\r\n", opts.c)
+	end
+	
+	if opts.t and not aux.valid_pattern(opts.t) then
+		exit_with_error("Incorrect pattern %q\r\n", opts.t)
+	end
 	
 	printf("Running testsuit...\r\n")
 	

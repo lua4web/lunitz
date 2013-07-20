@@ -132,6 +132,9 @@ function _M.assert_match(pattern, s, msg)
 	if type(pattern) ~= "string" then
 		return aux.exprec("pattern to be a string", type(pattern), msg)
 	end
+	if not aux.valid_pattern(pattern) then
+		return aux.exprec("valid pattern", aux.tostring(pattern), msg)
+	end
 	if type(s) ~= "string" then
 		return aux.exprec("string", type(s), msg)
 	end
@@ -145,6 +148,9 @@ end
 function _M.assert_not_match(pattern, s, msg)
 	if type(pattern) ~= "string" then
 		return aux.exprec("pattern to be a string", type(pattern), msg)
+	end
+	if not aux.valid_pattern(pattern) then
+		return aux.exprec("valid pattern", aux.tostring(pattern), msg)
 	end
 	if type(s) ~= "string" then
 		return aux.exprec("string", type(s), msg)

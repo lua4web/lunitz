@@ -89,4 +89,8 @@ function aux.unexp(unexpected, msg)
 	return false, msg or ("received unexpected " .. unexpected)
 end
 
+function aux.valid_pattern(pat)
+	return (pcall(string.match, "", pat))
+end
+
 return aux
