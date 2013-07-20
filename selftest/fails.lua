@@ -1,4 +1,8 @@
-testcase ("This shouldn't pass", {ignore_fails = true})
+testcase ("This shouldn't pass", {
+	ignore_fails = true,
+	setup = function() say("Setting up...") end,
+	teardown = function() say("Tearing down...") end
+})
 
 function Equality_assertions()
 	assert_equal(1, 0)

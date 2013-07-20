@@ -17,7 +17,7 @@ function test:add_event(ev)
 	table.insert(self.events, event(ev))
 end
 
-function test:run(verbose)
+function test:run(verbose, setup, teardown)
 	local ok = true
 	local status = "passed"
 	local report = aux.buffer()
@@ -32,9 +32,25 @@ function test:run(verbose)
 	report:addf("  Test %s: ", self.name)
 	report:add("Placeholder", "\r\n")
 	
-	local not_errored, error_message = xpcall(self.f, aux.handler)
-	local errored = not not_errored
+	local not_errored, error_message, error_message_suffix = true, "", ""
 	
+	if setup then
+		not_errored, error_message = xpcall(setup, aux.handler)
+	end
+	if not not_errored then
+		error_message_suffix = " in setup function"
+	else
+		not_errored, error_message = xpcall(self.f, aux.handler)
+		if not_errored or self.events[#self.events].type == "skip" then
+			if teardown then
+				not_errored, error_message = xpcall(teardown, aux.handler)
+			end
+			if not not_errored then
+				error_message_suffix = " in teardown function"
+			end
+		end
+	end
+		
 	for event_id, event in ipairs(self.events) do
 		if event.type == "assertion" then
 			stats.assertions.total = stats.assertions.total + 1
@@ -55,13 +71,14 @@ function test:run(verbose)
 		end
 	end
 	
-	if ok and errored and status ~= "skipped" then
+	if not not_errored and status ~= "skipped" then
 		status = "errored"
 		report:add(error_message)
 		ok = false
 	end
 	
-	if ok then
+	if ok or status == "skipped" then
+		ok = true
 		if status == "passed" then
 			report[2] = "OK (" .. aux.plural("assertion", stats.assertions.total) .. ")"
 		else
@@ -71,7 +88,7 @@ function test:run(verbose)
 		if status == "failed" then
 			report[2] = "Failed assertion #" .. stats.assertions.total
 		else
-			report[2] = "Error"
+			report[2] = "Error" .. error_message_suffix
 		end
 	end
 	

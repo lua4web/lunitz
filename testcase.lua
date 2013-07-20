@@ -49,7 +49,7 @@ function testcase:run(verbose)
 	for test_id, test in ipairs(self.tests) do
 		self.current_test_id = test_id
 		
-		local test_ok, test_status, test_report, test_stats = test:run(verbose)
+		local test_ok, test_status, test_report, test_stats = test:run(verbose, self.setup, self.teardown)
 		
 		stats.tests.total = stats.tests.total + 1
 		stats.tests[test_status] = stats.tests[test_status] + 1
