@@ -1,11 +1,13 @@
-local oop = require "loop.simple"
+local class = require "30log"
 local aux = require "lunitz.aux"
 
 local testcase = require "lunitz.testcase"
 
-local testsuit = oop.class{
-	testcases = {}
-}
+local testsuit = class()
+
+function testsuit:__init()
+	self.testcases = {}
+end
 
 function testsuit:add_testcase(name, params)
 	table.insert(self.testcases, testcase(name, params))

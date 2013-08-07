@@ -13,7 +13,7 @@ description = {
 }
 dependencies = {
 	"lua >= 5.1, < 5.3",
-	"loop >= 2.1",
+	"30log >= 0.5",
 	"alt-getopt >= 0.7"
 }
 build = {

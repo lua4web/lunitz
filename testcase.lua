@@ -1,19 +1,17 @@
-local oop = require "loop.simple"
+local class = require "30log"
 local aux = require "lunitz.aux"
 
 local test = require "lunitz.test"
 
-local testcase = oop.class()
+local testcase = class()
 
 function testcase:__init(name, params)
 	params = params or {}
-	return oop.rawnew(self, {
-		name = name,
-		setup = params.setup,
-		teardown = params.teardown,
-		ignore_fails = params.ignore_fails,
-		tests = {}
-	})
+	self.name = name
+	self.setup = params.setup
+	self.teardown = params.teardown
+	self.ignore_fails = params.ignore_fails
+	self.tests = {}
 end
 
 function testcase:add_test(name, f)

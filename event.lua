@@ -1,18 +1,16 @@
-local oop = require "loop.simple"
+local class = require "30log"
 local aux = require "lunitz.aux"
 
-local event = oop.class()
+local event = class()
 
 function event:__init(t)
 	local info = debug.getinfo(4, "Sl")
-	return oop.rawnew(self, {
-		type = t.type,
-		ok = t.ok,
-		source = info.short_src,
-		line = info.currentline,
-		name = t.name,
-		msg = t.msg
-	})
+	self.type = t.type
+	self.ok = t.ok
+	self.source = info.short_src
+	self.line = info.currentline
+	self.name = t.name
+	self.msg = t.msg
 end
 
 function event:report()

@@ -1,16 +1,14 @@
-local oop = require "loop.simple"
+local class = require "30log"
 local aux = require "lunitz.aux"
 
 local event = require "lunitz.event"
 
-local test = oop.class()
+local test = class()
 
 function test:__init(name, f)
-	return oop.rawnew(self, {
-		name = name,
-		f = f,
-		events = {}
-	})
+	self.name = name
+	self.f = f
+	self.events = {}
 end
 
 function test:add_event(ev)
